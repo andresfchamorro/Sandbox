@@ -1,2 +1,3 @@
 # Sandbox
-Collection of scripts/tools that I've found useful to process geospatial data.
+
+A space for various data processing scripts / or visualization templates, broken down by programming language. Scripts are generally project-specific but are often re-purposed for different tasks.
