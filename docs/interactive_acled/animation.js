@@ -12,9 +12,9 @@ var baseLayer = L.tileLayer('https://map1.vis.earthdata.nasa.gov/wmts-webmerc/VI
 
 //Conditions for heatmap
 var options = {
-  "radius": 10,
+  "radius": 8,
   "minOpacity": 1,
-  "blur": 15,
+  "blur": 13,
   "max": 15,
   "gradient": {0.2:'#0CA0E6',0.8: '#FDBC19', 1:'#D60004'},
 };
@@ -117,8 +117,18 @@ function Vis(error, data, json_yem){
 
     adminLayer = new L.geoJson(json_yem, {style: style}).addTo(mymap);
     heatmapLayer = new L.heatLayer(filteredDataset,options).addTo(mymap);
+		L.esri.basemapLayer('ImageryLabels').addTo(mymap);
 
     // heatmapLayer.setOptions(options).setLatLngs(subset);
+		var overlays = {
+			"IPC Phases (FEWS NET)": adminLayer,
+			"Density of Conflict Events (ACLED)": heatmapLayer
+		};
+		var opts = {
+			"collapsed": false
+		}
+
+		L.control.layers(null, overlays, opts).addTo(mymap);
 
 		var legend = L.control({position: 'topright'});
 
@@ -221,16 +231,13 @@ function update(h) {
   if(year_month!=Year_Month){
     Year_Month=year_month;
     filteredDataset = filterData(Year_Month);
-    heatmapLayer.setLatLngs(filteredDataset);
+		if(d3.select(".leaflet-heatmap-layer")._groups[0][0]){
+			heatmapLayer.setLatLngs(filteredDataset);
+		};
 		if(FEWS_years.includes(Year_Month)){
 			adminLayer.setStyle(style);
 		}
 
   }
 
-  // filter data set and redraw plot
-  // var newData = dataset.filter(function(d) {
-  //   return d.date < h;
-  // })
-  // drawPlot(newData);
 }

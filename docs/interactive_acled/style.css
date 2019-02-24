@@ -13,8 +13,12 @@ html, body, #map-canvas {
 }
 
 #div-slider{
-  height:15%;
-  width:100%
+  height:20%;
+  width:100%;
+}
+#div-slider h2{
+  margin-left: 50px;
+  margin-bottom: 0px;
 }
 
 /* From Time Slider */

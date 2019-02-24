@@ -1,7 +1,7 @@
 <!DOCTYPE html >
 <html lang="en">
   <head>
-    <title>ACLED September, 2018</title>
+    <title>AcledViz</title>
     <link rel="stylesheet" type="text/css" href="style.css"/>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
@@ -10,7 +10,9 @@
   </head>
 
 <body>
-  <div id="div-slider"></div>
+  <div id="div-slider">
+    <h2>Conflict Events and Food Insecurity in Yemen</h2>
+  </div>
   <div id="map-canvas"></div>
   <!-- <div id="map-canvas" style="width: 1000px; height: 600px"></div> -->
   <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -19,6 +21,10 @@
  integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
  crossorigin=""></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.4.0/leaflet-providers.js"></script>
+  <!-- Load Esri Leaflet from CDN -->
+  <script src="https://unpkg.com/esri-leaflet@2.2.3/dist/esri-leaflet.js"
+  integrity="sha512-YZ6b5bXRVwipfqul5krehD9qlbJzc6KOGXYsDjU9HHXW2gK57xmWl2gU6nAegiErAqFXhygKIsWPKbjLPXVb2g=="
+  crossorigin=""></script>
   <script src="leaflet-heat.js"></script>
   <script src="animation.js"></script>
 
