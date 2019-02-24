@@ -114,10 +114,31 @@ function Vis(error, data, json_yem){
     });
 
     var filteredDataset = filterData(Year_Month);
-    heatmapLayer = new L.heatLayer(filteredDataset,options).addTo(mymap)
 
     adminLayer = new L.geoJson(json_yem, {style: style}).addTo(mymap);
+    heatmapLayer = new L.heatLayer(filteredDataset,options).addTo(mymap);
+
     // heatmapLayer.setOptions(options).setLatLngs(subset);
+
+		var legend = L.control({position: 'topright'});
+
+		legend.onAdd = function (map) {
+
+		    var div = L.DomUtil.create('div', 'info legend'),
+		        grades = [1, 2, 3, 4, 5],
+		        labels = ["Minimal","Stressed","Crisis","Emergency","Famine"];
+
+		    // loop through our density intervals and generate a label with a colored square for each interval
+		    for (var i = 0; i < grades.length; i++) {
+		        div.innerHTML +=
+		            '<i style="background:' + IPC_colors[i + 1] + '"></i> ' +
+		            labels[i]+'<br>';
+		    }
+
+		    return div;
+		};
+
+		legend.addTo(mymap);
 
   }
 
