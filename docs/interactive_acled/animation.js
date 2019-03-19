@@ -12,10 +12,10 @@ var baseLayer = L.tileLayer('https://map1.vis.earthdata.nasa.gov/wmts-webmerc/VI
 
 //Conditions for heatmap
 var options = {
-  "radius": 8,
+  "radius": 10,
   "minOpacity": 1,
-  "blur": 13,
-  "max": 15,
+  "blur": 10,
+  "max": 10,
   "gradient": {0.2:'#0CA0E6',0.8: '#FDBC19', 1:'#D60004'},
 };
 
