@@ -15,7 +15,7 @@ var options = {
   "radius": 10,
   "minOpacity": 1,
   "blur": 10,
-  "max": 10,
+  "max": 13,
   "gradient": {0.2:'#0CA0E6',0.8: '#FDBC19', 1:'#D60004'},
 };
 
