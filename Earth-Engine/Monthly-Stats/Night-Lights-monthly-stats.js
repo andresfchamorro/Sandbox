@@ -1,24 +1,9 @@
 //    1. Import
 
-// var Ghana = ee.FeatureCollection('ft:1DQUmyrZjR2SQ6oDZ37MDvJBdBrFUnr6k6x_EH28H');
-// var all = ee.FeatureCollection('ft:17Mn6PoouIhN0FzbXcDMUsjQTOzc7uexFptArKVB1');
-// var gadm_adm2_old = ee.FeatureCollection('ft:1SwDJ-YIHeN2Lqv14pkBRlrWnpO7Vzq6bu90cEq2q');
-// var sahel_adm2 = ee.FeatureCollection('ft:1Km2OVbA2b7AhZfxMP0Pxq3xE3H-JS_3K6_OJ18V8');
-// var ndviCol = ee.ImageCollection(terra_16day).select('NDVI');
-// var sahel_test = ee.FeatureCollection('ft:1Km2OVbA2b7AhZfxMP0Pxq3xE3H-JS_3K6_OJ18V8').filter(ee.Filter.or(
-//   ee.Filter.eq('adm2_code', 154459),
-//   ee.Filter.eq('adm2_code', 154460)
-//   ))
-// var gadm_adm2 = ee.FeatureCollection('ft:1GdU_RjSazVOZ587r6eQbOfJi3SsdwN8g9SbQ0x8l');
-// var ss_adm2 = ee.FeatureCollection('ft:1up3bKym18AOSCflB20pztI4HhGwkbb4i8Q_ynfBz')
-// var artemis_shape = ee.FeatureCollection('ft:1f6dIWPjdRWXvgGvm8V8xQNKS90BystFeh4ETKwKu')
-// var Yemen_districts = ee.FeatureCollection(yemen);
-
+var Yemen_districts  = ee.FeatureCollection('USDOS/LSIB_SIMPLE/2017')
+  .filter(ee.Filter.eq('country_na', 'Yemen'));
+var viirs = ee.ImageCollection("NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG");
 var viirs_rad = viirs.select('avg_rad');
-
-// var setTimeCol = function(image){
-//   return image.set('system:time_start', image.get('system:time_start'));
-// }
 
 //     2. Set month and year
 
@@ -50,12 +35,14 @@ var byAll = ee.ImageCollection.fromImages(
     );
 
 print(byAll)
-// var n_images = byAll.toList(150).length();
-// print(n_images);
+var n_images = byAll.toList(150).length().getInfo();
+print(n_images);
 
 var avg_2018 = byAll.filterMetadata('year','equals',2018).mean();
 print(avg_2018)
-Map.addLayer(avg_2018)
+Map.centerObject(Yemen_districts,6);
+Map.addLayer(avg_2018.clip(Yemen_districts));
+Map.addLayer(Yemen_districts);
 
 
 //    3. Reduce to region(s)
@@ -68,8 +55,9 @@ var reducers = ee.Reducer.stdDev().combine({
 
 var ZonalStats = function(feature) {
 
-  //I don't know why maskedNDVI.length() is not working here
-  for (var i = 0; i < 56; i++) {
+  //I don't know why maskedNDVI.length() is not working here. 
+  //U should use getInfo() to make it a Javascript number. line 38
+  for (var i = 0; i < n_images; i++) {
 
     var i_string = ee.String(ee.Number(i));
     var image = ee.Image(byAll.filterMetadata('system:index','equals',i_string).first());
@@ -86,20 +74,16 @@ var ZonalStats = function(feature) {
     // set names
     var name_std = ee.String("Lights_std__").cat(year).cat("_").cat(month);
     var name_sum = ee.String("Lights_sum__").cat(year).cat("_").cat(month);
-
     feature = feature.set(name_std,statistics.get('avg_rad_stdDev'),name_sum,statistics.get('avg_rad_sum'));
-
   }
-
     return feature;
-
 }
 
-// var mappedReduction = Yemen_districts.map(ZonalStats);
-// print(mappedReduction)
+var mappedReduction = Yemen_districts.map(ZonalStats);
+print(mappedReduction);
 
-// Export.table.toDrive({
-//   collection: mappedReduction,
-//   description: 'yemen_nightlights',
-//   fileFormat: 'CSV'
-// });
+Export.table.toDrive({
+  collection: mappedReduction,
+  description: 'yemen_nightlights',
+  fileFormat: 'CSV'
+});
